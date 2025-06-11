@@ -1,27 +1,17 @@
 package com.gaz.demo.bot;
 
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.stereotype.Component;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.telegram.telegrambots.meta.TelegramBotsApi;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 
-@Component
-@ConfigurationProperties(prefix = "telegram")
+@Configuration
 public class BotConfig {
-    private String botName;
-    private String botToken;
-
-    public String getBotName() {
-        return botName;
-    }
-
-    public void setBotName(String botName) {
-        this.botName = botName;
-    }
-
-    public String getBotToken() {
-        return botToken;
-    }
-
-    public void setBotToken(String botToken) {
-        this.botToken = botToken;
-    }
+  @Bean
+    public TelegramBotsApi telegramBotsApi (AutoGasBot bot) throws TelegramApiException {
+      TelegramBotsApi telegramBotsApi = new TelegramBotsApi(DefaultBotSession.class);
+      telegramBotsApi.registerBot(bot);
+      return telegramBotsApi;
+  }
 }

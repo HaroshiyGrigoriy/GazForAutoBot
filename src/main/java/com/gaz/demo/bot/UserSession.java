@@ -1,7 +1,7 @@
 package com.gaz.demo.bot;
 
 public class UserSession {
-    private BotState state = BotState.IDLE;
+    private BotState state = BotState.DEFAULT;
     private String fio;
     private String location;
     private String phone;

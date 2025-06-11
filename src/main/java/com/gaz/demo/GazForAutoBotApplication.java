@@ -7,7 +7,6 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import com.gaz.demo.bot.BotConfig;
 
 @SpringBootApplication
-@EnableConfigurationProperties(BotConfig.class)
 public class GazForAutoBotApplication {
 
 	public static void main(String[] args) {

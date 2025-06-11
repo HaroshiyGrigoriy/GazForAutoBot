@@ -14,7 +14,6 @@ public class StartController {
         keyboard.setResizeKeyboard(true);
         KeyboardRow row = new KeyboardRow();
         row.add(new KeyboardButton("Оставить заявку"));
-        row.add(new KeyboardButton("Подробнее об оборудовании"));
         keyboard.setKeyboard(java.util.Collections.singletonList(row));
 
         SendMessage msg = new SendMessage(String.valueOf(chatId), startText());
@@ -23,9 +22,7 @@ public class StartController {
     }
 
     private String startText() {
-        return "\uD83D\uDC4B Добро пожаловать!\n" +
-                "Вы подписались на уведомления о постановке в лист ожидания на установку Газобаллонного оборудования (ГБО) автомобиля 6 поколения.\n\n" +
-                "Чтобы оставить заявку на установку оборудования на ваш автомобиль — нажмите кнопку \u00ABОставить заявку\u00BB.\n" +
-                "Сейчас мы собираем информацию обо всех желающих поставить ГБО, после чего обязательно свяжемся с вами.";
-    }
+        return "Привет! \uD83D\uDC4B\n" +
+                "Мы занимаемся установкой автооборудования: ГБО 6 поколения. \n" +
+                "Оставь заявку — наш специалист перезвонит и все расскажет.";  }
 }
