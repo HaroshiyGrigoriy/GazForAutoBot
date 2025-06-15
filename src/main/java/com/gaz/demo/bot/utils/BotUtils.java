@@ -1,10 +1,8 @@
 package com.gaz.demo.bot.utils;
 
 import com.gaz.demo.bot.AutoGasBot;
-import org.springframework.web.servlet.view.AbstractUrlBasedView;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
@@ -20,36 +18,47 @@ public class BotUtils {
         }
     }
 
-    public static void sendMessageWithButtons(AutoGasBot bot, Long chatId, String text, List<String> buttonTexts, List<String> callbackDatas) {
-        List<InlineKeyboardButton> buttons = new ArrayList<>();
-        for (int i = 0; i < buttonTexts.size(); i++) {
-            buttons.add(
-                    InlineKeyboardButton.builder()
-                            .text(buttonTexts.get(i))
-                            .callbackData(callbackDatas.get(i))
-                            .build()
-            );
-        }
-        InlineKeyboardMarkup markup = InlineKeyboardMarkup.builder()
-                .keyboardRow(buttons) // все кнопки — в одной строке
-                .build();
+    public static void sendMessageWithButtons(AutoGasBot bot, Long chatId, String text, InlineKeyboardMarkup markup) {
 
         try {
-            bot.execute(SendMessage.builder().chatId(chatId).text(text).replyMarkup(markup).parseMode("HTML").build());
+            bot.execute(SendMessage.builder()
+                    .chatId(chatId)
+                    .text(text)
+                    .replyMarkup(markup)
+                    .parseMode("HTML").
+                    build());
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }
     }
 
-    public static InlineKeyboardMarkup createKeyboardMarkup(String text, String callBack) {
+    public static InlineKeyboardMarkup createKeyboardMarkup(List<String> buttonTexts, List<String> callbackData, int buttonsPerRow) {
+        List<List<InlineKeyboardButton>> keyboard = buildKeyboardRows(buttonTexts, callbackData, buttonsPerRow);
         return InlineKeyboardMarkup.builder()
-                .keyboardRow(List.of(InlineKeyboardButton.builder()
-                        .text(text)
-                        .callbackData(callBack)
-                        .build()))
+                .keyboard(keyboard)
                 .build();
     }
 
+
+    public static List<List<InlineKeyboardButton>> buildKeyboardRows(List<String> buttonText, List<String> callback, int bpr) {
+        List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
+        List<InlineKeyboardButton> currentRaw = new ArrayList<>();
+
+        for (int i = 0; i < buttonText.size(); i++) {
+            currentRaw.add(InlineKeyboardButton.builder().text(buttonText.get(i))
+                    .callbackData(callback.get(i))
+                    .build()
+            );
+            if (currentRaw.size() == bpr) {
+                keyboard.add(new ArrayList<>(currentRaw));
+                currentRaw.clear();
+            }
+        }
+        if (!currentRaw.isEmpty()) {
+            keyboard.add(new ArrayList<>(currentRaw));
+        }
+        return keyboard;
+    }
     public static String instruction() {
         return """
                  Спасибо, что хотите установить наше оборудование!\u2028
