@@ -1,5 +1,6 @@
-package com.gaz.demo.bot;
+package com.gaz.demo.bot.configs;
 
+import com.gaz.demo.bot.AutoGasBot;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
@@ -7,7 +8,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 
 @Configuration
-public class BotConfig {
+public class BotRegistrarConfig {
   @Bean
     public TelegramBotsApi telegramBotsApi (AutoGasBot bot) throws TelegramApiException {
       TelegramBotsApi telegramBotsApi = new TelegramBotsApi(DefaultBotSession.class);
