@@ -32,73 +32,25 @@ public class BotUtils {
         }
     }
 
-    public static InlineKeyboardMarkup createKeyboardMarkup(List<String> buttonTexts, List<String> callbackData, int buttonsPerRow) {
-        List<List<InlineKeyboardButton>> keyboard = buildKeyboardRows(buttonTexts, callbackData, buttonsPerRow);
-        return InlineKeyboardMarkup.builder()
-                .keyboard(keyboard)
-                .build();
-    }
 
-
-    public static List<List<InlineKeyboardButton>> buildKeyboardRows(List<String> buttonText, List<String> callback, int bpr) {
+    public static InlineKeyboardMarkup createKeyboardMarkup(List<CustomButton> buttons) {
         List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
         List<InlineKeyboardButton> currentRaw = new ArrayList<>();
 
-        for (int i = 0; i < buttonText.size(); i++) {
-            currentRaw.add(InlineKeyboardButton.builder().text(buttonText.get(i))
-                    .callbackData(callback.get(i))
-                    .build()
-            );
-            if (currentRaw.size() == bpr) {
-                keyboard.add(new ArrayList<>(currentRaw));
-                currentRaw.clear();
+        for (CustomButton button : buttons) {
+            InlineKeyboardButton.InlineKeyboardButtonBuilder builder =
+                    InlineKeyboardButton.builder().text(button.getText());
+            if (button.getUrl() != null) {
+                builder.url(button.getUrl());
+            } else if (button.getCallback() != null) {
+                builder.callbackData(button.getCallback());
             }
+            currentRaw.add(builder.build());
         }
         if (!currentRaw.isEmpty()) {
             keyboard.add(new ArrayList<>(currentRaw));
         }
-        return keyboard;
-    }
-    public static String instruction() {
-        return """
-                 Спасибо, что хотите установить наше оборудование!\u2028
-                 Для включения в лист ожидания на установку оборудования, и составления заявки нам понадобится ваше:👇 
-                 -Имя
-                 -Контактный номер телефона
-                 -Город установки
-                 -Марка автомобиля на который будет устанавливаться ГБО
-                 -Когда удобно ответить на звонок
-                  
-                  <b>Пример заполненной заявки:  </b>
-                  <b>----------</b>
-                    Имя : Петр
-                    Телефон для связи : 79871235566
-                    Город установки : Чебоксары
-                    Марка машины : BMW
-                    Когда удобно ответить на наш звонок : В любой день после 15 часов дня
-                  <b>----------
-                    
-                    Для удобства рекомендуем скопировать форму ниже и заполнить ее в поле ввода. </b>
-                """
-                ;
-    }
 
-    public static String pattern() {
-        return """
-                 <pre>
-                 Имя :
-                 Телефон для связи :
-                 Город установки :
-                 Марка машины :
-                 Когда удобно ответить на наш звонок :
-                 </pre>
-                """;
-    }
-
-    public static String responseToTheUserAfterTheRequest() {
-        return """
-                 Готово!😎
-                 Спасибо, что отправили заявку, мы обязательно вам позвоним!
-                """;
+        return InlineKeyboardMarkup.builder().keyboard(keyboard).build();
     }
 }
