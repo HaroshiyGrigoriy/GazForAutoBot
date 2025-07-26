@@ -2,12 +2,8 @@ package com.gaz.demo;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
-
-import com.gaz.demo.bot.BotConfig;
 
 @SpringBootApplication
-@EnableConfigurationProperties(BotConfig.class)
 public class GazForAutoBotApplication {
 
 	public static void main(String[] args) {
